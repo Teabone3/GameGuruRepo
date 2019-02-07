@@ -10,7 +10,8 @@
 
 void file_createmydocsfolder ( void )
 {
-	//  create a GameGuru folder inside MyDocs
+
+	//  create an FPSC-R folder inside MyDocs
 	t.told_s=GetDir();
 	SetDir (  g.mydocumentsdir_s.Get() );
 	if (  PathExist(g.myfpscfiles_s.Get()) == 0  )  MakeDirectory (  g.myfpscfiles_s.Get() );
@@ -21,6 +22,13 @@ void file_createmydocsfolder ( void )
 		ExitPrompt ( t.szwork , "Path Error" );
 		ExitProcess ( 0 );
 	}
+
+return;
+
+
+//ASSESS FILE FOR HOW OLD IT IS
+
+
 }
 
 int getdatevaluefromdatestring ( char* tdayofyear_s )

@@ -12,9 +12,6 @@ g_sprButton = {}
 g_posButton = {}
 g_imgCursor = 0
 g_sprCursor = 0
-g_sprCursorPtrX = 50
-g_sprCursorPtrY = 33
-g_sprCursorPtrClick = 0
 
 function win_init()
  -- determine style folder we are in
@@ -50,12 +47,10 @@ end
 
 function win_main()
  -- control menus
- cursorControl = require "titlesbank\\cursorcontrol"
- g_sprCursorPtrX,g_sprCursorPtrY,g_sprCursorPtrClick = cursorControl.getinput(g_sprCursorPtrX,g_sprCursorPtrY,g_sprCursorPtrClick)
- SetSpritePosition ( g_sprCursor, g_sprCursorPtrX, g_sprCursorPtrY )
+ SetSpritePosition ( g_sprCursor, g_MouseX, g_MouseY )
  iHighlightButton = 0
- if g_sprCursorPtrX > 50-(GetImageWidth(g_imgButton[GAME_CONTINUE])/2) and g_sprCursorPtrX <= 50+(GetImageWidth(g_imgButton[GAME_CONTINUE])/2) then
-  if g_sprCursorPtrY > g_posButton[GAME_CONTINUE] and g_sprCursorPtrY <= g_posButton[GAME_CONTINUE]+GetImageHeight(g_imgButton[GAME_CONTINUE]) then
+ if g_MouseX > 50-(GetImageWidth(g_imgButton[GAME_CONTINUE])/2) and g_MouseX <= 50+(GetImageWidth(g_imgButton[GAME_CONTINUE])/2) then
+  if g_MouseY > g_posButton[GAME_CONTINUE] and g_MouseY <= g_posButton[GAME_CONTINUE]+GetImageHeight(g_imgButton[GAME_CONTINUE]) then
    iHighlightButton = GAME_CONTINUE
   end
  end
@@ -64,7 +59,7 @@ function win_main()
  else
   SetSpriteImage ( g_sprButton[GAME_CONTINUE], g_imgButton[GAME_CONTINUE] )
  end
- if g_sprCursorPtrClick == 1 then
+ if g_MouseClick == 1 then
   if iHighlightButton==GAME_CONTINUE then
    SwitchPage("")
   end

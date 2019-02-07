@@ -48,13 +48,10 @@ function module_combatshoot.main(e,combattype,movetype,attacktype)
    end
    if g_Time > ai_bot_patroltime[e] + 5000 then
     -- after 20 seconds elapsed, return to patrol
-    -- PE: only if a ai_bot_pathindex exist , otherwise this will just flicker the idle animation.
-    if ai_bot_pathindex[e] ~= -1 then
-		ai_bot_state[e] = ai_state_startpatrol
-		ai_bot_coverindex[e] = -1
-		ai_bot_targetx[e] = nil
-		ai_bot_patroltime[e] = g_Time
-	end
+	ai_bot_state[e] = ai_state_startpatrol
+	ai_bot_coverindex[e] = -1
+	ai_bot_targetx[e] = nil
+    ai_bot_patroltime[e] = g_Time
    end
   else
    ai_bot_patroltime[e] = g_Time
@@ -81,7 +78,7 @@ function module_combatshoot.main(e,combattype,movetype,attacktype)
  module_combatcore.reloadweapon(e)
  
  -- handle debugging
- -- module_core.debug(e,AIObjNo,PlayerDist,combattype)
+ --module_core.debug(e,AIObjNo,PlayerDist,combattype)
 
 end
 

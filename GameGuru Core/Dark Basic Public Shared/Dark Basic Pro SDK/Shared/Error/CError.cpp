@@ -12,8 +12,6 @@ CRuntimeErrorHandler* g_pErrorHandler = NULL;
 extern bool g_bCascadeQuitFlag;
 extern char g_strErrorClue[512];
 
-void timestampactivity(int i, char* desc_s);
-
 void Error ( char* szMessage )
 {
 	if(g_pErrorHandler)
@@ -31,7 +29,6 @@ void RunTimeError ( DWORD dwErrorCode )
 	//C++Conversion
 	char szErrorString[256];
 	sprintf ( szErrorString , "Runtime Error: %i (%s)" , dwErrorCode, g_strErrorClue );
-	timestampactivity(0, szErrorString); // PE:
 	MessageBox ( NULL, szErrorString, "Error", MB_OK | MB_TOPMOST );
 	ExitProcess ( 0 );
 
@@ -61,7 +58,6 @@ void RunTimeError(DWORD dwErrorCode, LPSTR pExtraErrorString)
 	{
 		char szErrorString[256];
 		sprintf ( szErrorString , "Runtime Error: %i : %s (%s)" , dwErrorCode, pExtraErrorString, g_strErrorClue );
-		timestampactivity(0, szErrorString); // PE:
 		MessageBox ( NULL, szErrorString, "Error", MB_OK | MB_TOPMOST );
 		ExitProcess ( 0 );
 	}

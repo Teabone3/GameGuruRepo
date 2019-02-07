@@ -105,9 +105,6 @@ sMesh::sMesh ( )
 	fScaleOffsetU			= 1.0f;
 	fScaleOffsetV			= 1.0f;
 
-	dwArtFlags				= 0;
-	fBoostIntensity			= 0.0f;
-
 	bUsesMaterial			= false;	// default settings in case we use it (ie fade object)
 	mMaterial.Diffuse.r		= 1.0f;
 	mMaterial.Diffuse.g		= 1.0f;

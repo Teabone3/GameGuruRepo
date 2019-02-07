@@ -19,15 +19,15 @@ function bookcase_main(e)
 	 if g_Entity[e]['plrvisible'] == 1 then 
       if g_Entity[e]['haskey'] == 1 then 
 	   if GetGamePlayerStateXBOX() == 1 then
-        Prompt("The Secret Door is locked. Press Y button to unlock Secret Door")
+        PromptLocalForVR(e,"The Secret Door is locked. Press Y button to unlock Secret Door")
 	   else
-        Prompt("The Secret Door is locked. Press E key to unlock Secret Door")
+        PromptLocalForVR(e,"The Secret Door is locked. Press E key to unlock Secret Door")
        end
 	   if g_KeyPressE == 1 then 
         SetActivated(e,1)
        end
       else
-       Prompt("The Secret Door is locked. Find a key to unlock Secret Door")
+       PromptLocalForVR(e,"The Secret Door is locked. Find a key to unlock Secret Door")
       end
 	 end
     end
@@ -36,9 +36,9 @@ function bookcase_main(e)
      -- bookcase is unlocked and closed
      if g_Entity[e]['plrvisible'] == 1 then 
 	  if GetGamePlayerStateXBOX() == 1 then
-       Prompt("Press Y button to open Secret Door")
+       PromptLocalForVR(e,"Press Y button to open Secret Door")
 	  else
-       Prompt("Press E to open Secret Door")
+       PromptLocalForVR(e,"Press E to open Secret Door")
       end
 	  if g_KeyPressE == 1 and g_Entity[e]['animating'] == 0 and bookcase_pressed == 0 then  
 	   SetAnimation(0)

@@ -8,10 +8,8 @@
 #include "CObjectsC.h"
 
 // External
-//extern int g_iFBXGeometryToggleMode;
-//extern int g_iFBXGeometryCenterMesh;
-int g_iFBXGeometryToggleMode = 0;
-int g_iFBXGeometryCenterMesh = 0;
+extern int g_iFBXGeometryToggleMode;
+extern int g_iFBXGeometryCenterMesh;
 
 FBXExporter::FBXExporter()
 {

@@ -888,16 +888,6 @@ void CSteamAchievements::OnAchievementStored( UserAchievementStored_t *pCallback
 	 IsWorkshopLoadingOn = 0;
  }
 
- FPSCR bool SteamOwned ( void )
- {
-	 bool bGameGuruOwned = SteamApps()->BIsSubscribed();
-	 bool bGameGuruOwnedFromFreeWeekend = SteamApps()->BIsSubscribedFromFreeWeekend();
-	 if ( bGameGuruOwned == true || bGameGuruOwnedFromFreeWeekend == true )
-		 return true;
-	 else
-		 return false;
- }
-
  //=========================================================================================================//
 
  FPSCR LPSTR SteamGetPlayerName(void)

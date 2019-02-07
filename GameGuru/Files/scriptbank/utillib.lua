@@ -24,7 +24,7 @@ local RayCast = IntersectAll
 
 -- include these for debugging
 local Prompt  = Prompt
-local PromptE = PromptLocal
+local PromptE =PromptLocal
 
 -- If using any of the functions generating random positions
 -- make sure random number generator is seeded by putting the
@@ -79,62 +79,6 @@ function U.Rotate3D( x, y, z, xrot, yrot, zrot )
 	return NX, NY, NZ
 end
 
-
--------------------------------------------
--- Functions used to aid foraging system --
--------------------------------------------
-local collectablesList = nil
-
-function SetList( list )
-	collectablesList = list
-end
-
-function ChangeAmount( name, by, list)
-	list = list or collectablesList
-
-	if list == nil then return end
-	
-	local itemToSet = list[ name ]
-	
-	if itemToSet == nil then
-		list[ name ] = { amount = by }
-	else
-		itemToSet.amount = itemToSet.amount + by
-	end
-end
-
-function SetAmount( name, to, list)
-	list = list or collectablesList
-
-	if list == nil then return end
-	
-	list[ name ] = { amount = to }
-end
-
-function HaveAmount( name, list )
-	list = list or collectablesList
-
-	if list == nil then return 0 end
-	
-	if list[ name ] ~= nil then
-		return list[ name ].amount
-	else
-		return 0
-	end
-end
-
-function HaveEnough( name, amount, list )
-	list = list or collectablesList
-
-	if amount == 0 then
-		return true
-		
-	elseif list[ name ] ~= nil then
-		return list[ name ].amount >= amount
-	else
-		return false
-	end
-end
 --------------------------------------------------
 -- Function to return Object in players eyeline --
 --                                              --
@@ -152,12 +96,8 @@ function U.ObjectPlayerLookingAt( dist, ignore )
 
 	local pxp, pyp, pzp = getPos3()
 	local pxa, pya, pza = getAng3()
-	
-	if ducked == nil or ducked() == 0 then 
-		pyp = pyp + 31 
-	else 
-		pyp = pyp + 10 
-	end
+
+	if ducked() == 1 then pyp = pyp + 10 else pyp = pyp + 31 end
 
 	local rayX, rayY, rayZ = 
 		Rotate3D ( 0, 0, dist, rad( pxa ), rad( pya ), rad( pza ) )
@@ -166,7 +106,7 @@ function U.ObjectPlayerLookingAt( dist, ignore )
 end
 
 ------------------------------------------------------
--- Function to detect if players eyeline intersects --
+-- Function to detect if players eyeline intercects --
 -- a given object.                                  --
 -- parameters:                                      --
 --      obj : object id                             --
@@ -265,11 +205,7 @@ function U.PlayerLookingNear( e, dist, fov )
 			PlayerVertAngle = 2 * ( 360 - PlayerVertAngle )
 		end
 		
-		if ducked == nil or ducked() == 0 then 
-			pyp = pyp + 31 
-		else 
-			pyp = pyp + 10 
-		end
+		if ducked() == 1 then pyp = pyp + 10 else pyp = pyp + 31 end
 		
 		local dx, dy, dz = Ent.x - pxp, Ent.y - pyp, Ent.z - pzp
 		
@@ -452,7 +388,7 @@ function U.ClosestEntities( dist, num, x, z )
 	
 	local sortedList = {}
 	
-	-- next sort and place in new list until 'num' entities found
+	-- next sort and place in nbew list until 'num' entities cound
 	for k, _ in SortPairs( entityList, function( list, a, b ) return list[ a ] < list[ b ] end ) do
 		sortedList[ #sortedList + 1 ] = k
 		if #sortedList == num then break end

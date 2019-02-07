@@ -178,7 +178,6 @@ DARKSDK GGFORMAT GetValidStencilBufferFormat ( GGFORMAT BackBufferFormat )
 {
 	GGFORMAT DepthFormat;
 	#ifdef DX11
-//	DepthFormat = DXGI_FORMAT_R32_TYPELESS; //PE: z-fighting did not help ?
 	DepthFormat = GGFMT_D24S8;
 	#else
 	// create the list in order of precedence

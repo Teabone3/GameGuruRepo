@@ -2962,16 +2962,9 @@ bool PathFinderAdvanced::ShortestPath ( float fEX, float fEY, Path* pBuildPath, 
 						pNextWP->fDistF = pNextWP->fDistG + pNextWP->fDistH;
 						pNextWP->iVisited = 1;
 		                
-						if ( iCount < pWaypoint->iNumEdges )
-						{
-							pNewInfo [ iCount ].pThisWP = pNextWP;
-							pNewInfo [ iCount ].fCost = pNextWP->fDistF;
-							iCount++;
-						}
-						else
-						{
-							// this should not happen - investigate (MP finestgladelevel)
-						}
+						pNewInfo [ iCount ].pThisWP = pNextWP;
+						pNewInfo [ iCount ].fCost = pNextWP->fDistF;
+						iCount++;
 					}
 					else if ( pNextWP->iVisited == 1 )
 					{
@@ -2982,16 +2975,9 @@ bool PathFinderAdvanced::ShortestPath ( float fEX, float fEY, Path* pBuildPath, 
 							pNextWP->fDistH = EstimateDistance ( pNextWP->fX, pNextWP->fY, fEX, fEY );
 							pNextWP->fDistF = pNextWP->fDistG + pNextWP->fDistH;
 		                    
-							if ( iCount < pWaypoint->iNumEdges )
-							{
-								pNewInfo [ iCount ].pThisWP = pNextWP;
-								pNewInfo [ iCount ].fCost = pNextWP->fDistF;
-								iCount++;
-							}
-							else
-							{
-								// this should not happen - investigate (MP finestgladelevel)
-							}
+							pNewInfo [ iCount ].pThisWP = pNextWP;
+							pNewInfo [ iCount ].fCost = pNextWP->fDistF;
+							iCount++;
 						}
 					}
 				}

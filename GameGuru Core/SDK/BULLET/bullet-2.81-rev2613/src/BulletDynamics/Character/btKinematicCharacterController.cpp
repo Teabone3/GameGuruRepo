@@ -700,7 +700,6 @@ void btKinematicCharacterController::jump ()
 	m_verticalVelocity = m_jumpSpeed;
 	m_wasJumping = true;
 	m_iJumpImmunity = 5;
-	m_bDidJump = true;
 
 	fLastFloorYPos = m_currentPosition.getY() + m_maxJumpHeight;
 

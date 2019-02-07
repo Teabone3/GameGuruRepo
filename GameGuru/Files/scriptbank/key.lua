@@ -28,12 +28,12 @@ function key_main(e)
 	
 	if Result < 20.0 then
 	    if GetGamePlayerStateXBOX() == 1 then
-         Prompt("Press Y button to pick up key")
+         PromptLocalForVR(e,"Press Y button to pick up key")
 	    else
-		 Prompt("Press E to pick up key")
+		 PromptLocalForVR(e,"Press E to pick up key")
 		end
 		if g_KeyPressE == 1 then
-			Prompt("Collected key")
+			PromptLocalForVR(e,"Collected key")
 			PlaySound(e,0)
 			Collected(e)
 			Destroy(e)

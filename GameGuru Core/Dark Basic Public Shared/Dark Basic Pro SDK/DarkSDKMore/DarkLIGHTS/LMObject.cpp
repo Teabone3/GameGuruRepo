@@ -305,7 +305,7 @@ void LMObject::BuildPolyList( bool bFlatShaded )
 
 		// add to master poly list
 		LMPoly* pNewPoly = NULL;
-		if ( bFlatShaded ) // 020718 - ignoring normals!! || ( fDotP1 > 0.995f && fDotP2 > 0.995f && fDotP3 > 0.995f ) )
+		if ( bFlatShaded || ( fDotP1 > 0.995f && fDotP2 > 0.995f && fDotP3 > 0.995f ) )
 		{
 			// flat polygon
 			pNewPoly = new LMPoly( );
@@ -702,24 +702,16 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 		// get inverse matrices (to restore local object space values in new vert data)
 		float fDet;
 		GGMATRIX matInvWorld;
-		GGMatrixInverse(&matInvWorld,&fDet,&pFrame->matAbsoluteWorld);
-
-		// 160718 - old code seems to include world position in the inverse (MUST mess up normals!)
-		// OR IT COULD BE THE WRONG NORMALS ARE BEING PASSED IN - rotate entity 270 degrees, see normals mess up!!
 		GGMATRIX matInvTransposedWorld;
 		GGMATRIX * pmatTransInvAbsoluteWorld = new GGMATRIX;
 		GGMatrixInverse( pmatTransInvAbsoluteWorld, NULL, &pFrame->matAbsoluteWorld );
 		GGMatrixTranspose( pmatTransInvAbsoluteWorld, pmatTransInvAbsoluteWorld );
+		GGMatrixInverse(&matInvWorld,&fDet,&pFrame->matAbsoluteWorld);
 		GGMatrixInverse(&matInvTransposedWorld,&fDet,pmatTransInvAbsoluteWorld);
-		//GGMATRIX matInvNoTransWorld = pFrame->matAbsoluteWorld;
-		//matInvNoTransWorld._41 = 0;
-		//matInvNoTransWorld._42 = 0;
-		//matInvNoTransWorld._43 = 0;
-		//GGMatrixInverse(&matInvNoTransWorld,&fDet,&matInvNoTransWorld);
-
-		// fill new vertex data block
 		GGVECTOR3 vecVert;
 		GGVECTOR3 vecNorm;
+
+		// fill new vertex data block
 		DWORD dwVertexIndex = 0;
 		LMPolyGroup *pPolyGroup = pPolyGroupList;
 		while ( pPolyGroup )
@@ -738,14 +730,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 				if ( cOffsetMap.dwNX > 0 )
 				{
 					// 020117 - need original normals thanks!
-					//if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
-					//{
-					//	vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv1[0];
-					//	vecNorm.y = ((LMCurvedPoly*)pPolyPtr)->normalv1[1];
-					//	vecNorm.z = ((LMCurvedPoly*)pPolyPtr)->normalv1[2];
-					//}
-					//else
-					// 020718 - reinstated curvedpolys
 					if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
 					{
 						vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv1[0];
@@ -759,7 +743,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 						vecNorm.z = pPolyPtr->normal[2];
 					}
 					GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvTransposedWorld );
-					//GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvNoTransWorld );
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNX*4) ) ) = vecNorm.x;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNY*4) ) ) = vecNorm.y;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNZ*4) ) ) = vecNorm.z;
@@ -784,14 +767,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 				if ( cOffsetMap.dwNX > 0 )
 				{
 					// 020117 - need original normals thanks!
-					//if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
-					//{
-					//	vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv2[0];
-					//	vecNorm.y = ((LMCurvedPoly*)pPolyPtr)->normalv2[1];
-					//	vecNorm.z = ((LMCurvedPoly*)pPolyPtr)->normalv2[2];
-					//}
-					//else
-					// 020718 - reinstated curvedpolys
 					if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
 					{
 						vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv2[0];
@@ -805,7 +780,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 						vecNorm.z = pPolyPtr->normal[2];
 					}
 					GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvTransposedWorld );
-					//GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvNoTransWorld );
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNX*4) ) ) = vecNorm.x;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNY*4) ) ) = vecNorm.y;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNZ*4) ) ) = vecNorm.z;
@@ -830,14 +804,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 				if ( cOffsetMap.dwNX > 0 )
 				{
 					// 020117 - need original normals thanks!
-					//if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
-					//{
-					//	vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv3[0];
-					//	vecNorm.y = ((LMCurvedPoly*)pPolyPtr)->normalv3[1];
-					//	vecNorm.z = ((LMCurvedPoly*)pPolyPtr)->normalv3[2];
-					//}
-					//else
-					// 020718 - reinstated curvedpolys
 					if ( ((LMCurvedPoly*)pPolyPtr)->IsCurved() )
 					{
 						vecNorm.x = ((LMCurvedPoly*)pPolyPtr)->normalv3[0];
@@ -851,7 +817,6 @@ void LMObject::CreateTriOnlyAndApplyUVData ( void )
 						vecNorm.z = pPolyPtr->normal[2];
 					}
 					GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvTransposedWorld );
-					//GGVec3TransformNormal ( &vecNorm, &vecNorm, &matInvNoTransWorld );
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNX*4) ) ) = vecNorm.x;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNY*4) ) ) = vecNorm.y;
 					*( (float*) ( pVertexData + dwVertexIndex + (cOffsetMap.dwNZ*4) ) ) = vecNorm.z;

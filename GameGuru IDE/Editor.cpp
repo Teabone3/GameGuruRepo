@@ -3711,17 +3711,6 @@ bool CEditorApp::IsParentalControlActive ( void )
 			fclose( pFile );
 			pFile = NULL;
 		}
-		else
-		{
-			error = _tfopen_s( &pFile, _T("educontrolmode.ini"), _T("rb") );
-			if ( !error )
-			{
-				bParentalControlActive = true;
-				g_bAlsoRemoveRestrictedContentToggle = true;
-				fclose( pFile );
-				pFile = NULL;
-			}
-		}
 	}
 	return bParentalControlActive;
 }

@@ -644,7 +644,7 @@ void entity_lua_playsoundifsilent ( void )
 	}
 }
 
-void entity_lua_playnon3Dsound_core ( int iLoopMode )
+void entity_lua_playnon3Dsound ( void )
 {
 	//  since sounds that call this will normally be 3D sounds, positioning the sound is still required. This will mean
 	//  the sound playback will not be "non 3d", especially as the player moves. When process entities, if this sound
@@ -661,24 +661,11 @@ void entity_lua_playnon3Dsound_core ( int iLoopMode )
 		{
 			PositionSound (  t.tsnd,CameraPositionX(0),CameraPositionY(0),CameraPositionZ(0) );
 			SetSoundVolume (  t.tsnd,soundtruevolume(100.0) );
-			if ( iLoopMode == 0 )
-				PlaySound (  t.tsnd );
-			else
-				LoopSound (  t.tsnd );
+			PlaySound (  t.tsnd );
 			t.entityelement[t.e].soundisnonthreedee=1;
 		}
 	}
 	t.luaglobal.lastsoundnumber=t.tsnd;
-}
-
-void entity_lua_playnon3Dsound ( void )
-{
-	entity_lua_playnon3Dsound_core ( 0 );
-}
-
-void entity_lua_loopnon3Dsound ( void )
-{
-	entity_lua_playnon3Dsound_core ( 1 );
 }
 
 void entity_lua_loopsound ( void )
@@ -693,11 +680,6 @@ void entity_lua_loopsound ( void )
 		if ( SoundLooping(t.tsnd) == 0 ) 
 		{
 			loopinternal3dsound(t.tsnd,t.entityelement[t.e].x,t.entityelement[t.e].y,t.entityelement[t.e].z);
-		}
-		else
-		{
-			// keep calling LoopSound to update entity position during game
-			posinternal3dsound(t.tsnd,t.entityelement[t.e].x,t.entityelement[t.e].y,t.entityelement[t.e].z);
 		}
 	}
 	t.luaglobal.lastsoundnumber=t.tsnd;
@@ -1012,8 +994,7 @@ void entity_lua_resetpositionx ( void )
 	entity_lua_findcharanimstate ( );
 	if ( t.tcharanimindex != -1 ) 
 	{
-		//t.i = t.charanimstates[g.charanimindex].obj;
-		t.i = t.charanimstates[t.tcharanimindex].obj;
+		t.i = t.charanimstates[g.charanimindex].obj;
 		AISetEntityPosition ( t.i, t.v_f, ObjectPositionY(t.tobj), ObjectPositionZ(t.tobj) );
 	}
 }
@@ -1035,8 +1016,7 @@ void entity_lua_resetpositiony ( void )
 	entity_lua_findcharanimstate ( );
 	if ( t.tcharanimindex != -1 ) 
 	{
-		//t.i = t.charanimstates[g.charanimindex].obj;
-		t.i = t.charanimstates[t.tcharanimindex].obj;
+		t.i = t.charanimstates[g.charanimindex].obj;
 		AISetEntityPosition ( t.i, ObjectPositionX(t.tobj), t.v_f, ObjectPositionZ(t.tobj) );
 	}
 }
@@ -1058,8 +1038,7 @@ void entity_lua_resetpositionz ( void )
 	entity_lua_findcharanimstate ( );
 	if ( t.tcharanimindex != -1 ) 
 	{
-		//t.i = t.charanimstates[g.charanimindex].obj;
-		t.i = t.charanimstates[t.tcharanimindex].obj;
+		t.i = t.charanimstates[g.charanimindex].obj;
 		AISetEntityPosition ( t.i, ObjectPositionX(t.tobj), ObjectPositionY(t.tobj), t.v_f );
 	}
 }
@@ -1401,10 +1380,10 @@ void entity_lua_setanimationspeed ( void )
 		t.charanimstates[t.tcharanimindex].animationspeed_f=(65.0/100.0)*t.entityelement[t.e].eleprof.animspeed;
 }
 
-void entity_lua_setentityhealth_core ( int iSilent )
+void entity_lua_setentityhealth ( void )
 {
-	//  if new health is zero, apply damage to entity directly
-	if (  t.v <= 0 && iSilent == 0 ) 
+	//  if health is zero, apply damage to entity instead
+	if (  t.v <= 0 ) 
 	{
 		//  set an entities health
 		if ( t.entityelement[t.e].briefimmunity == 0 )
@@ -1428,14 +1407,6 @@ void entity_lua_setentityhealth_core ( int iSilent )
 	{
 		t.entityelement[t.e].health=t.v;
 	}
-}
-void entity_lua_setentityhealth ( )
-{
-	entity_lua_setentityhealth_core ( 0 );
-}
-void entity_lua_setentityhealthsilent ( )
-{
-	entity_lua_setentityhealth_core ( 1 );
 }
 
 void entity_lua_setforcex ( void )
@@ -1562,6 +1533,8 @@ void entity_lua_charactercontrolfidget ( void )
 		//  want to avoid 'unnecessary' state machines hard-coded into engine
 		if (  t.charanimstates[t.tcharanimindex].playcsi == g.csi_limbo  )  t.charanimstates[t.tcharanimindex].playcsi = g.csi_unarmed;
 	}
+return;
+
 }
 
 void entity_lua_charactercontrolducked ( void )
@@ -1604,6 +1577,8 @@ void entity_lua_setcharactertowalkrun ( void )
 	{
 		SteamSendLua (  Steam_LUA_setcharactertowalkrun,t.e,t.v );
 	}
+return;
+
 }
 
 void entity_lua_setlockcharacter ( void )
@@ -1616,6 +1591,8 @@ void entity_lua_setlockcharacter ( void )
 		t.charanimstate.freezeallmovement=t.v;
 		t.charanimstates[t.tcharanimindex]=t.charanimstate;
 	}
+return;
+
 }
 
 void entity_lua_setcharactertostrafe ( void )
@@ -1870,8 +1847,7 @@ void entity_lua_replaceplayerweapon ( void )
 	//  assign preference for new weapon
 	if (  t.tswapslot>0 ) 
 	{
-		t.weaponslot[t.tswapslot].pref = t.weaponindex;
-		t.weaponammo[t.tswapslot] = 0; // reset so new weapon can work out its new ammo
+		t.weaponslot[t.tswapslot].pref=t.weaponindex;
 	}
 	//  now collect weapon (will find freed up slot from above)
 	t.tqty=t.entityelement[t.e].eleprof.quantity;

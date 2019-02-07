@@ -7,7 +7,7 @@ end
 function health_main(e)
  PlayerDist = GetPlayerDistance(e)
  if PlayerDist < 80 and g_PlayerHealth > 0 then
-   Prompt("Collected health")
+   PromptLocalForVR(e,"Collected health")
    PlaySound(e,0)
    AddPlayerHealth(e)
    Destroy(e)
