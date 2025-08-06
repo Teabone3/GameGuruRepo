@@ -96,6 +96,19 @@ g_MouseClick = 0
 g_EntityElementMax = 0
 g_PlayerUnderwaterMode = 0
 
+-- Default Playable Map Size
+g_mapsizeminx = 100
+g_mapsizemaxx = 51100
+g_mapsizeminz = 100
+g_mapsizemaxz = 51100
+
+function PlayableArea(minx,maxx,minz,maxz)
+g_mapsizeminx = minx
+g_mapsizemaxx = maxx
+g_mapsizeminz = minz
+g_mapsizemaxz = maxz
+end
+
 -- Checkpoint and soundloop states
 g_CheckpointX = 0
 g_CheckpointY = 0
@@ -1945,6 +1958,7 @@ AIEntityRemoveTarget: AIEntityRemoveTarget(obj,targetid) -- where obj is the obj
 AIEntityMoveToCover: AIEntityMoveToCover(obj,x,z) -- where obj is the object number of the entity. See DarkAI docs for parameter descriptions
 AIGetEntityCanFire: AIGetEntityCanFire(obj) -- where obj is the object number of the entity. See DarkAI docs for parameter descriptions
 
+***** VR and Headtracking
 GetHeadTracker : GetHeadTracker() -- returns a value of one if the head tracker is connected
 ResetHeadTracker : ResetHeadTracker() -- resets the tracker to signal device is facing forward
 GetHeadTrackerYaw : GetHeadTrackerYaw() - returns the yaw of the head tracker if attached
@@ -1959,6 +1973,7 @@ ScaleObject : ScaleObject( obj, x, y, z ) -- Scales object in all axis (Note: us
 SetSkyTo : SetSkyTo ( str ) -- where str is the folder name of the sky you want to change to
 
 SetLutTo : SetLutTo ( "str" ) -- where str is the name of the post process filter effect to change to ("none" is default / none)
+GetLut : GetLut() -- returns the name of the loaded LUT
 SetPostSaturation : SetPostSaturation ( v ) -- where v is the value between 0 and 100 for post process saturation (30 is default)
 GetPostSaturation : value = GetPostSaturation ( ) -- gets the saturation value currently used in the game
 SetPostSepia : SetPostSepia ( v ) -- where v is the value between 0 and 100 for post process sepia effect (0 is default / none)
@@ -1973,8 +1988,8 @@ GetObjectScales : xs, ys, zs = GetObjectScales( obj ) -- returns scale values of
 GetEntityWeight : weight = GetEntityWeight( e ) -- returns the Physics weight value of the entity
 
 ***** Collision box is defined by coordinates of two opposing corners, from these it is easy to calculate the size of the object
-GetObjectColBox : xmin, ymin, zmin, xmax, ymax, zmax = GetObjectColBox( obj ) -- returns collision cube of object
-GetEntityColBox : xmin, ymin, zmin, xmax, ymax, zmax = GetEntityColBox( e )   -- returns collision cube of entity
+GetObjectCollBox : xmin, ymin, zmin, xmax, ymax, zmax = GetObjectColBox( obj ) -- returns collision cube of object
+GetEntityCollBox : xmin, ymin, zmin, xmax, ymax, zmax = GetEntityColBox( e )   -- returns collision cube of entity. Example: local x1, y1, z1, x2, y2, z2 = GetEntityCollBox(e)
 
 ***** Lua control of dynamic light, you get the light number using entity e number then use that in the other light functions
 ***** for example; lightNum = GetEntityLightNumber( e )  then  x, y, z = GetLightPosition( lightNum )
@@ -2012,8 +2027,12 @@ GetWaterFlowSpeed() -- gets water setting attributes
 GetWaterDistortionWaves() -- gets water setting attributes
 GetRippleWaterSpeed() -- gets water setting attributes
 
+***** Entity Texture
 SetEntityHighlight(e,v) -- set an overlay colour on entity, v = 0(none/remove),1(red),2(pink),3(green),4(blue/green),5(gold)
-
+ChangeTexture(e,texturepath) -- Change the texture of the entity. For example: ChangeTexture(e,"entitybank\\Industrial\\Gas Tank_D.dds") OR ChangeTexture(e,"entitybank\\Industrial\\Gas Tank_D.dds",2) to include material index if multi texture object.
+PlayVideoOnEntity(e,videopath,v) -- entity e number, video file path, [optional] loopvideo = 1/0 
+StopVideoOnEntity(e) -- Stop video texture
+IsVideoOnEntityPlaying(e) -- Returns if video texture is playing on entity.
 
 ***** Dymanic sun commands.
 SetSunDirection(x,y,z) -- The direction will be multiplyid into a position so you can use ranges like -10 to 10 or similar.
@@ -2078,5 +2097,9 @@ EulerToQuat -- To be documented
 QuatMultiply -- To be documented
 QuatSLERP -- To be documented
 QuatLERP -- To be documented
+
+***** utility
+MsgBox("") -- Display pop-up "Lua Message" confirmation dialogue box. Do not run this on loop!
+Reset(Fade() -- To be documented
 
 --]]

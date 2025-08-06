@@ -1239,9 +1239,11 @@ void welcome_findbestpromotion ( LPSTR pReturnString )
 		char pStatusStr[10240];
 		strcpy(pStatusStr, pWorkStr);
 		if (pChop) pStatusStr[pChop - pWorkStr] = 0;
-		char* pStatusValue = strstr(pStatusStr, ":") + 1;
+		char* pStatusValue = strstr(pStatusStr, ":");
+		if (pStatusValue)
+			pStatusValue = pStatusValue + 1;
 		if (pChop[0] == ',') pChop += 1;
-		if (strstr(pStatusValue, "success") != NULL)
+		if (pStatusValue && strstr(pStatusValue, "success") != NULL)
 		{
 			// success
 			// offers - first URL
@@ -1602,9 +1604,11 @@ bool welcome_announcements_init ( void )
 			char pStatusStr[10240];
 			strcpy(pStatusStr, pWorkStr);
 			if (pChop) pStatusStr[pChop - pWorkStr] = 0;
-			char* pStatusValue = strstr(pStatusStr, ":") + 1;
+			char* pStatusValue = strstr(pStatusStr, ":");
+			if (pStatusValue)
+				pStatusValue = pStatusValue + 1;
 			if (pChop[0] == ',') pChop += 1;
-			if (strstr(pStatusValue, "success") != NULL)
+			if (pStatusValue && strstr(pStatusValue, "success") != NULL)
 			{
 				// success
 				// news

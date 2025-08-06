@@ -1,6 +1,7 @@
 -- GamePlayerControl module
 
 local gameplayercontrol = {}
+local allowplayertoleavemapterraineditablearea = 0
 
 g_gunandmeleemouseheld = 0
 g_meleekeynotfree = 0
@@ -263,7 +264,8 @@ function gameplayercontrol.weaponfire()
 		end
 
 		-- Underwater weapons fire
-		if ( GetFireModeSettingsNoSubmergedFire() == 1 and GetGamePlayerStateUnderwater() == 1 ) then 
+		--if gun doesnt allow firing weapon under water ignore also prevent 3rd person from using weapons while underwater
+		if ( GetFireModeSettingsNoSubmergedFire() == 1 and GetGamePlayerStateUnderwater() == 1 ) or ( GetPlrObjectPositionY() <= GetGamePlayerStateWaterlineY() )  then 
 			SetGamePlayerStateFiringMode(0)
 		end
 		if ( (bit32.band(g_MouseClickControl,2)) == 2 and GetFireModeSettingsActionBlockStart() ~= 0 and GetGamePlayerStateBlockingAction() == 0 and GetGamePlayerStateIsMelee() == 0 ) then 
@@ -896,10 +898,12 @@ function gameplayercontrol.control()
 	end
 
 	-- Prevent player leaving terrain area
-	if ( GetPlrObjectPositionX()<100 ) then SetGamePlayerControlPushangle(90.0) SetGamePlayerControlPushforce(1.0) end
-	if ( GetPlrObjectPositionX()>51100 ) then SetGamePlayerControlPushangle(270.0) SetGamePlayerControlPushforce(1.0) end
-	if ( GetPlrObjectPositionZ()<100 ) then SetGamePlayerControlPushangle(0.0) SetGamePlayerControlPushforce(1.0) end
-	if ( GetPlrObjectPositionZ()>51100 ) then SetGamePlayerControlPushangle(180.0) SetGamePlayerControlPushforce(1.0) end
+	if allowplayertoleavemapterraineditablearea == 0 then
+	if ( GetPlrObjectPositionX() < g_mapsizeminx ) then SetGamePlayerControlPushangle(90.0) SetGamePlayerControlPushforce(1.0) end
+	if ( GetPlrObjectPositionX() > g_mapsizemaxx ) then SetGamePlayerControlPushangle(270.0) SetGamePlayerControlPushforce(1.0) end
+	if ( GetPlrObjectPositionZ() < g_mapsizeminz ) then SetGamePlayerControlPushangle(0.0) SetGamePlayerControlPushforce(1.0) end
+	if ( GetPlrObjectPositionZ() > g_mapsizemaxz ) then SetGamePlayerControlPushangle(180.0) SetGamePlayerControlPushforce(1.0) end
+	end
 
 	-- Reduce any player push force over time
 	if ( GetGamePlayerControlPushforce()>0 ) then 
